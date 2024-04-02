@@ -25,7 +25,7 @@ class BoardDrawer:
         self.screen.title("Snake and Ladder Board")
         self.screen.setup(width=600, height=600)
         self.pen = turtle.Turtle()
-        self.pen.speed(500000)
+        self.pen.speed(0)
         self.pen.penup()
         self.pen.goto(*START_POS)
         self.pen.pendown()
