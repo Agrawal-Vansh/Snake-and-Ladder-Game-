@@ -3,4 +3,4 @@ Project Created BY
 Vansh Agrawal
 \nPiyush
 \n HLO
-\n Manush Metha h
+\n Manush Mitha h
