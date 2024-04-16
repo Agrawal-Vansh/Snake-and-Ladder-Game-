@@ -1,6 +1,5 @@
 from PIL import Image
-a=Image.open("istockphoto-455302535-612x612.jpg")
-a.show()
+import time
 class GamePlayer:
 	"""
 	Encapsulates a player properties
@@ -190,6 +189,11 @@ class Game:
 	if required , we can change that to give some control to user.
 	"""
 		while self.can_play():
+			# from PIL import Image
+			a=Image.open("istockphoto-455302535-612x612.jpg")
+			a.show()
+			time.sleep(100000000000)
+			a.close()
 			curr_player = self.get_next_player()
 			player_input = input(
 				f"Player {self.turn+1}, Press enter to roll the dice")
