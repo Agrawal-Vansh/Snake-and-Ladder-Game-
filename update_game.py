@@ -1,6 +1,7 @@
 from PIL import Image
 a=Image.open("istockphoto-455302535-612x612.jpg")
 a.show()
+# a.close()
 class GamePlayer:
 	"""
 	Encapsulates a player properties
@@ -21,6 +22,7 @@ class GamePlayer:
 
 	def get_pos(self):
 		return self.position
+
 
 	def get_rank(self):
 		return self.rank
