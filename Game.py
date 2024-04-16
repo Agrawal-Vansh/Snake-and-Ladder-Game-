@@ -1,3 +1,6 @@
+from PIL import Image
+a=Image.open("C:\\Users\\piyus\\OneDrive\\Desktop\\istockphoto-455302535-612x612.jpg")
+a.show()
 class GamePlayer:
 	"""
 	Encapsulates a player properties
