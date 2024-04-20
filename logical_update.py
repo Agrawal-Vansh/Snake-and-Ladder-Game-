@@ -2,9 +2,7 @@ from PIL import Image
 a=Image.open("istockphoto-455302535-612x612.jpg")
 a.show()
 class GamePlayer:
-    """
-    Encapsulates a player properties
-    """
+    # Encapsulates a player properties
 
     def __init__(self, _id):
         self._id = _id
@@ -26,17 +24,14 @@ class GamePlayer:
 
 
 class MovingEntity:
-    """
-    You can create any moving entity, like snake or ladder or
-    wormhole by extending this
-    """
+    # we have  create  the  moving entity i.e. snake and  ladder by this class
 
     def __init__(self, end_pos=None):
         self.end_pos = end_pos
         self.desc = None
 
     def set_description(self, desc):
-        self.desc = None
+        self.desc = desc
 
     def get_end_pos(self):
         if self.end_pos is None:
@@ -45,7 +40,7 @@ class MovingEntity:
 
 
 class Snake(MovingEntity):
-    """Snake entity"""
+    # Snake entity
 
     def __init__(self, end_pos=None):
         super(Snake, self).__init__(end_pos)
@@ -53,7 +48,7 @@ class Snake(MovingEntity):
 
 
 class Ladder(MovingEntity):
-    """Ladder entity"""
+    # Ladder entity
 
     def __init__(self, end_pos=None):
         super(Ladder, self).__init__(end_pos)
@@ -61,17 +56,14 @@ class Ladder(MovingEntity):
 
 
 class Board:
-    """
-    Define board with size and moving entities
-    """
-
+    # Define board with size and moving entities
+    # self.board Uses the concept of Incapsulation
     def __init__(self, size):
         self.size = size
         self.board = {}
-
     def get_size(self):
         return self.size
-
+    # Here sert_moving_entity used the concept of dependency injection
     def set_moving_entity(self, pos, moving_entity):
         self.board[pos] = moving_entity
 
@@ -80,6 +72,7 @@ class Board:
             return player_pos
         if player_pos not in self.board:
             return player_pos
+        # If Player is bit by snake or has climb a ladder by calling desc function of moving entity which is stored as a value in the dictionary board
         print(f'{self.board[player_pos].desc} at {player_pos}')
         return self.board[player_pos].get_end_pos()
 
@@ -90,6 +83,7 @@ class Board:
 
 
 class Dice:
+    # adding flexibility to the code by make it to work on dice of any  number
     def __init__(self, sides):
         self.sides = sides
 
@@ -108,7 +102,7 @@ class Game:
         self.winner = None
         self.last_rank = 0
         self.consecutive_six = 0
-
+    # Type Hinting board:Board
     def initialize_game(self, board: Board, dice_sides, num_players):
         self.board = board
         self.dice = Dice(dice_sides)
@@ -128,8 +122,10 @@ class Game:
         if self.board.at_last_pos(curr_player.get_pos()):
             curr_player.set_rank(self.last_rank + 1)
             self.last_rank += 1
-            if curr_player.get_pos() == self.board.get_size():
-                self.winner = curr_player
+            # if curr_player.get_pos() == self.board.get_size():
+            #     self.winner = curr_player
+            self.winner=curr_player
+            # simplified the code without extra if condition
 
     def can_move(self, curr_player, to_move_pos):
         if to_move_pos <= self.board.get_size() and curr_player.get_rank() == -1:
@@ -141,6 +137,7 @@ class Game:
         if dice_result != 6 or self.consecutive_six == 3:
             if self.consecutive_six == 3:
                 print("Changing turn due to 3 consecutive sixes")
+            # Note can not directly call get_next_player as it is rank based not based on result of dice 
             self.turn = (self.turn + 1) % len(self.players)
         else:
             print(f"One more turn for player {self.turn+1} after rolling 6")
@@ -148,6 +145,7 @@ class Game:
     def play(self):
         while self.can_play():
             curr_player = self.get_next_player()
+            # self.turn+1 as it is index pf players[] self.turn=0 means turn of player 1
             input(f"Player {self.turn+1}, Press enter to roll the dice")
             dice_result = self.dice.roll()
             print(f'dice_result: {dice_result}')
@@ -164,6 +162,11 @@ class Game:
         print('-------------game state-------------')
         for ix, _p in enumerate(self.players):
             print(f'Player: {ix+1} is at pos {_p.get_pos()}')
+        # Alternative form of using for loop when we require both index and value at that index
+        # for ix in range(len(self.players)):
+        #     player = self.players[ix]
+        #     print(f'Player: {ix+1} is at pos {player.get_pos()}')
+
         print('-------------game state-------------\n\n')
 
     def print_game_result(self):
@@ -229,7 +232,7 @@ def get_num_players():
             print("Invalid input. Please enter a valid number.")
 
 
-def sample_run():
+def run():
     num_players = get_num_players()
     board = BoardSetup.setup()
     game = Game()
@@ -237,4 +240,4 @@ def sample_run():
     game.play()
 
 
-sample_run()
+run()
