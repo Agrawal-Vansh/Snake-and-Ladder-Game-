@@ -1,7 +1,7 @@
 from PIL import Image
 a=Image.open("istockphoto-455302535-612x612.jpg")
 a.show()
-# a.close()
+a.close()
 class GamePlayer:
 	"""
 	Encapsulates a player properties

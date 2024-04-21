@@ -68,8 +68,6 @@ class Board:
         self.board[pos] = moving_entity
 
     def get_next_pos(self, player_pos):
-        if player_pos > self.size:
-            return player_pos
         if player_pos not in self.board:
             return player_pos
         # If Player is bit by snake or has climb a ladder by calling desc function of moving entity which is stored as a value in the dictionary board
@@ -111,21 +109,14 @@ class Game:
     def can_play(self):
         return self.winner is None
 
-    def get_next_player(self):
-        while True:
-            if self.players[self.turn].get_rank() == -1:
-                return self.players[self.turn]
-            self.turn = (self.turn + 1) % len(self.players)
+    def current_player(self):
+        return self.players[self.turn]
 
     def move_player(self, curr_player, next_pos):
         curr_player.set_position(next_pos)
         if self.board.at_last_pos(curr_player.get_pos()):
-            curr_player.set_rank(self.last_rank + 1)
-            self.last_rank += 1
-            # if curr_player.get_pos() == self.board.get_size():
-            #     self.winner = curr_player
+            # curr_player.set_rank(self.last_rank + 1)
             self.winner=curr_player
-            # simplified the code without extra if condition
 
     def can_move(self, curr_player, to_move_pos):
         if to_move_pos <= self.board.get_size() and curr_player.get_rank() == -1:
@@ -137,14 +128,14 @@ class Game:
         if dice_result != 6 or self.consecutive_six == 3:
             if self.consecutive_six == 3:
                 print("Changing turn due to 3 consecutive sixes")
-            # Note can not directly call get_next_player as it is rank based not based on result of dice 
+            # Note can not directly call _player as it is rank based not based on result of dice 
             self.turn = (self.turn + 1) % len(self.players)
         else:
             print(f"One more turn for player {self.turn+1} after rolling 6")
 
     def play(self):
         while self.can_play():
-            curr_player = self.get_next_player()
+            curr_player = self.current_player()
             # self.turn+1 as it is index pf players[] self.turn=0 means turn of player 1
             input(f"Player {self.turn+1}, Press enter to roll the dice")
             dice_result = self.dice.roll()
@@ -154,9 +145,8 @@ class Game:
                 self.move_player(curr_player, next_pos)
             self.change_turn(dice_result)
             self.print_game_state()
-            if self.winner:
-                self.print_game_result()
-                break
+        self.print_game_result()
+            
 
     def print_game_state(self):
         print('-------------game state-------------')
@@ -170,7 +160,7 @@ class Game:
         print('-------------game state-------------\n\n')
 
     def print_game_result(self):
-        print(f'Player {self.winner._id+1} has won the game!')
+        print(f'Player {self.winner._id +1} has won the game!')
         print("The Leaderboard is as follow:")
          # Sort players based on their positions in descending order
         leaderboard = sorted(self.players, key=lambda x: x.get_pos(), reverse=True)
